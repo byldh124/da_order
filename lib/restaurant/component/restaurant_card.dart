@@ -1,6 +1,7 @@
 import 'package:da_order/common/const/colors.dart';
 import 'package:da_order/restaurant/model/restaurant_detail_model.dart';
 import 'package:da_order/restaurant/model/restaurant_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -28,9 +29,13 @@ class RestaurantCard extends StatelessWidget {
   //상세카드여부
   final bool isDetail;
 
+  //Hero Widget tag
+  final String? heroKey;
+
   final String? detail;
 
-  const RestaurantCard({super.key,
+  const RestaurantCard({
+    super.key,
     required this.image,
     required this.name,
     required this.tags,
@@ -39,14 +44,12 @@ class RestaurantCard extends StatelessWidget {
     required this.deliveryFee,
     required this.ratings,
     this.isDetail = false,
+    this.heroKey,
     this.detail,
   });
 
-  factory RestaurantCard.fromModel({
-    required RestaurantModel model,
-    bool isDetail = false,
-    String? detail
-  }) {
+  factory RestaurantCard.fromModel(
+      {required RestaurantModel model, bool isDetail = false, String? detail}) {
     return RestaurantCard(
       image: Image.network(
         model.thumbUrl,
@@ -59,26 +62,28 @@ class RestaurantCard extends StatelessWidget {
       deliveryFee: model.deliveryFee,
       ratings: model.ratings,
       isDetail: isDetail,
-      detail: model is RestaurantDetailModel ? model.detail : null,
+      heroKey: model.id,
+      detail: model is RestaurantDetailModel && isDetail ? model.detail : null,
     );
-  }
-
-  Widget _getImage() {
-    if (isDetail) {
-      return image;
-    } else {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: image,
-      );
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _getImage(),
+        if (heroKey != null)
+          Hero(
+            tag: ObjectKey(heroKey),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(isDetail ? 0 : 12),
+              child: image,
+            ),
+          ),
+        if (heroKey == null)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(isDetail ? 0 : 12),
+            child: image,
+          ),
         const SizedBox(
           height: 16,
         ),
@@ -124,9 +129,10 @@ class RestaurantCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16,),
-              if (detail != null)
-                Text('$detail'),
+              SizedBox(
+                height: 16,
+              ),
+              if (detail != null) Text('$detail'),
             ],
           ),
         ),

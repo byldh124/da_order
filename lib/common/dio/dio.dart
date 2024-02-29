@@ -1,6 +1,18 @@
 import 'package:da_order/common/const/data.dart';
+import 'package:da_order/common/secure_storage/secure_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final dioProvider = Provider<Dio>((ref) {
+  final storage = ref.watch(secureStorageProvider);
+
+  final dio = Dio();
+  dio.interceptors.add(
+    CustomInterceptor(storage: storage),
+  );
+  return dio;
+});
 
 class CustomInterceptor extends Interceptor {
   final FlutterSecureStorage storage;
@@ -24,7 +36,8 @@ class CustomInterceptor extends Interceptor {
   // 2) 응답을 받을 때
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}');
+    print(
+        '[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}');
     super.onResponse(response, handler);
   }
 

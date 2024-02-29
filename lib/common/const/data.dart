@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 
-const storage = FlutterSecureStorage();
+//const storage = FlutterSecureStorage();
 
 // 안드로이드 스튜디오 에뮬레이터
 const emulatorIp = '10.0.0.2:3000';

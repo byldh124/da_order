@@ -4,18 +4,20 @@ import 'dart:io';
 import 'package:da_order/common/const/colors.dart';
 import 'package:da_order/common/const/data.dart';
 import 'package:da_order/common/layout/default_layout.dart';
+import 'package:da_order/common/secure_storage/secure_storage.dart';
 import 'package:da_order/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../common/component/custom_text_form_field.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dio = Dio();
 
     // 안드로이드 스튜디오 에뮬레이터
@@ -66,7 +68,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    //ID:비밀번호
+                    //ID:비밀번호/
                     final rawString = 'test@codefactory.ai:testtest';
 
                     Codec<String, String> stringToBase64 = utf8.fuse(base64);
@@ -82,6 +84,8 @@ class LoginScreen extends StatelessWidget {
 
                     final refreshToken = response.data['refreshToken'];
                     final accessToken = response.data['accessToken'];
+
+                    final storage = ref.read(secureStorageProvider);
 
                     await storage.write(
                         key: REFRESH_TOKEN_KEY, value: refreshToken);
