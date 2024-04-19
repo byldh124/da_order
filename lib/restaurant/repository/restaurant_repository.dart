@@ -2,6 +2,7 @@ import 'package:da_order/common/const/data.dart';
 import 'package:da_order/common/dio/dio.dart';
 import 'package:da_order/common/model/cursor_pagination_model.dart';
 import 'package:da_order/common/model/pagination_params.dart';
+import 'package:da_order/common/repository/base_pagination_repository.dart';
 import 'package:da_order/restaurant/model/restaurant_detail_model.dart';
 import 'package:da_order/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart' hide Headers;
@@ -21,12 +22,14 @@ final restaurantRepositoryProvider = Provider<RestaurantRepository>((ref) {
 });
 
 @RestApi()
-abstract class RestaurantRepository {
+abstract class RestaurantRepository
+    implements IBasePaginationRepository<RestaurantModel> {
   // base url http://$ip/restaurant
   factory RestaurantRepository(Dio dio, {String baseUrl}) =
       _RestaurantRepository;
 
   // http://$ip/restaurant/
+  @override
   @GET('/')
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<RestaurantModel>> paginate({
