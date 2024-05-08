@@ -1,5 +1,6 @@
 import 'package:da_order/common/model/cursor_pagination_model.dart';
 import 'package:da_order/common/model/pagination_params.dart';
+import 'package:da_order/common/provider/pagination_provider.dart';
 import 'package:da_order/restaurant/model/restaurant_model.dart';
 import 'package:da_order/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,16 +22,14 @@ final restaurantProvider =
   return RestaurantStateNotifier(repository: repository);
 });
 
-class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
-  final RestaurantRepository repository;
+class RestaurantStateNotifier extends PaginationProvider<RestaurantModel, RestaurantRepository> {
 
   RestaurantStateNotifier({
-    required this.repository,
-  }) : super(CursorPaginationLoading()) {
-    paginate();
-  }
+    required super.repository,
+  });
 
-  Future<void> paginate(
+  /// migrate -> @PaginationProvider
+  /*Future<void> paginate(
       {int fetchCount = 20,
       //추가로 데이터 더 가져오기
       // true - 추가로 데이터 더 가져옴
@@ -115,7 +114,7 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     } catch (e) {
       state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
     }
-  }
+  }*/
 
   void getDetail({
     required String id,

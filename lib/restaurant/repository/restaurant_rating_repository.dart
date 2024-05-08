@@ -2,6 +2,7 @@ import 'package:da_order/common/const/data.dart';
 import 'package:da_order/common/dio/dio.dart';
 import 'package:da_order/common/model/cursor_pagination_model.dart';
 import 'package:da_order/common/model/pagination_params.dart';
+import 'package:da_order/common/repository/base_pagination_repository.dart';
 import 'package:da_order/rating/model/rating_model.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,12 +15,13 @@ final restaurantRatingRepositoryProvider =
   final dio = ref.watch(dioProvider);
   return RestaurantRatingRepository(
     dio,
-    baseUrl: 'http:/$ip/restaurant/$id/rating',
+    baseUrl: 'http://$ip/restaurant/$id/rating',
   );
 });
 
 @RestApi()
-abstract class RestaurantRatingRepository {
+abstract class RestaurantRatingRepository
+    implements IBasePaginationRepository<RatingModel> {
   factory RestaurantRatingRepository(Dio dio, {String baseUrl}) =
       _RestaurantRatingRepository;
 

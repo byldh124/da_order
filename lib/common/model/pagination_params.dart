@@ -21,6 +21,11 @@ class PaginationParams {
       count: count ?? this.count
     );
   }
+
+  @override
+  String toString() {
+    return 'PaginationParams{after: $after, count: $count}';
+  }
 }
 
 
