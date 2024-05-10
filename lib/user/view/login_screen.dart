@@ -26,8 +26,8 @@ class LoginScreen extends ConsumerWidget {
 
     final ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
-    String email = '';
-    String pass = '';
+    String email = 'test@codefactory.ai';
+    String password = 'testtest';
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -48,6 +48,7 @@ class LoginScreen extends ConsumerWidget {
                   width: MediaQuery.of(context).size.width / 3 * 2,
                 ),
                 CustomTextFormField(
+                  initialValue: email,
                   hintText: '이메일을 입력해주세요.',
                   onChanged: (String value) {
                     email = value;
@@ -57,9 +58,10 @@ class LoginScreen extends ConsumerWidget {
                   height: 16.0,
                 ),
                 CustomTextFormField(
+                  initialValue: password,
                   hintText: '비밀번호를 입력해주세요.',
                   onChanged: (String value) {
-                    pass = value;
+                    password = value;
                   },
                   obscureText: true,
                 ),
@@ -69,7 +71,7 @@ class LoginScreen extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () async {
                     //ID:비밀번호/
-                    final rawString = 'test@codefactory.ai:testtest';
+                    final rawString = '$email:$password';
 
                     Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
