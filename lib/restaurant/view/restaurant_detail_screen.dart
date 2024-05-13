@@ -92,7 +92,7 @@ class _RestaurantDetailScreenState
               (context, index) {
             return Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: ProductCard(product: products[index]),
+              child: ProductCard.fromRestaurantProductModel(model: products[index]),
             );
           },
           childCount: products.length,

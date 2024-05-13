@@ -62,8 +62,6 @@ U extends IBasePaginationRepository<T>>
         count: fetchCount,
       );
 
-      print("paginationParams : $paginationParams");
-
       // fetchMore
       // 데이터를 추가로 더 가져오는 상황
       if (fetchMore) {
@@ -77,6 +75,9 @@ U extends IBasePaginationRepository<T>>
         paginationParams = paginationParams.copyWith(
           after: pState.data.last.id,
         );
+
+        print("paginationParams : $paginationParams");
+
       }
       // 데이터를 처음부터 가져오는 상황
       else {

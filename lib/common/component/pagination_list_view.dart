@@ -21,7 +21,8 @@ class PaginationListView<T extends IModelWithId>
   });
 
   @override
-  ConsumerState<PaginationListView> createState() => _PaginationListViewState();
+  ConsumerState<PaginationListView> createState() =>
+      _PaginationListViewState<T>();
 }
 
 class _PaginationListViewState<T extends IModelWithId>
@@ -43,6 +44,76 @@ class _PaginationListViewState<T extends IModelWithId>
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final state = ref.watch(widget.provider);
+
+    if (state is CursorPaginationLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (state is CursorPaginationError) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            state.message,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            height: 16.0,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(widget.provider.notifier).paginate(forceRefetch: true);
+            },
+            child: Text(
+              '다시시도',
+            ),
+          )
+        ],
+      );
+    }
+
+    // CursorPagination
+    // CursorPaginationFetchingMore
+    // CursorPaginationRefetching
+    final cp = state as CursorPagination<T>;
+
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ListView.separated(
+        controller: controller,
+        itemBuilder: (_, index) {
+          if (index == cp.data.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: Center(
+                child: cp is CursorPaginationFetchingMore
+                    ? CircularProgressIndicator()
+                    : Text('마지막 데이터'),
+              ),
+            );
+          }
+          final pItem = cp.data[index];
+          return widget.itemBuilder(
+            context,
+            index,
+            pItem,
+          );
+        },
+        separatorBuilder: (_, index) {
+          return const SizedBox(
+            height: 8,
+          );
+        },
+        itemCount: cp.data.length + 1,
+      ),
+    ));
   }
 }
